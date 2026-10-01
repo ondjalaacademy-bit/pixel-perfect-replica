@@ -11,9 +11,10 @@ import { lovable } from "@/integrations/lovable/index";
 type LoginSearch = { next?: string };
 
 export const Route = createFileRoute("/login")({
-  validateSearch: (search: Record<string, unknown>): LoginSearch => ({
-    next: typeof search.next === "string" ? search.next : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): LoginSearch => {
+    const next = search["next"];
+    return typeof next === "string" ? { next } : {};
+  },
   head: () => ({
     meta: [
       { title: "Entrar — Ondjala Academy" },
