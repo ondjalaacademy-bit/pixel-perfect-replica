@@ -157,7 +157,9 @@ export type Database = {
           currency: string
           id: string
           method: string
+          notes: string | null
           paid_at: string | null
+          proof_path: string | null
           reference: string | null
           registration_id: string
           status: Database["public"]["Enums"]["payment_status"]
@@ -169,7 +171,9 @@ export type Database = {
           currency?: string
           id?: string
           method?: string
+          notes?: string | null
           paid_at?: string | null
+          proof_path?: string | null
           reference?: string | null
           registration_id: string
           status?: Database["public"]["Enums"]["payment_status"]
@@ -181,7 +185,9 @@ export type Database = {
           currency?: string
           id?: string
           method?: string
+          notes?: string | null
           paid_at?: string | null
+          proof_path?: string | null
           reference?: string | null
           registration_id?: string
           status?: Database["public"]["Enums"]["payment_status"]
@@ -310,6 +316,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      settings: {
+        Row: {
+          account_holder: string
+          address: string
+          bank_name: string
+          contact_email: string
+          contact_phone: string
+          iban: string
+          id: number
+          payment_instructions: string
+          updated_at: string
+        }
+        Insert: {
+          account_holder?: string
+          address?: string
+          bank_name?: string
+          contact_email?: string
+          contact_phone?: string
+          iban?: string
+          id?: number
+          payment_instructions?: string
+          updated_at?: string
+        }
+        Update: {
+          account_holder?: string
+          address?: string
+          bank_name?: string
+          contact_email?: string
+          contact_phone?: string
+          iban?: string
+          id?: number
+          payment_instructions?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

@@ -18,7 +18,16 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedMinhaContaRouteImport } from './routes/_authenticated/minha-conta'
 import { Route as CursosIndexRouteImport } from './routes/cursos.index'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminAlunosRouteImport } from './routes/_authenticated/admin.alunos'
+import { Route as AuthenticatedAdminConfiguracoesRouteImport } from './routes/_authenticated/admin.configuracoes'
+import { Route as AuthenticatedAdminCursosRouteImport } from './routes/_authenticated/admin.cursos'
+import { Route as AuthenticatedAdminInscricoesRouteImport } from './routes/_authenticated/admin.inscricoes'
+import { Route as AuthenticatedAdminPagamentosRouteImport } from './routes/_authenticated/admin.pagamentos'
+import { Route as AuthenticatedAdminRelatoriosRouteImport } from './routes/_authenticated/admin.relatorios'
+import { Route as AuthenticatedAdminTurmasRouteImport } from './routes/_authenticated/admin.turmas'
 import { Route as AuthenticatedInscricaoCourseIdRouteImport } from './routes/_authenticated/inscricao.$courseId'
+import { Route as AuthenticatedPagamentoRegistrationIdRouteImport } from './routes/_authenticated/pagamento.$registrationId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,10 +73,63 @@ const CursosSlugRoute = CursosSlugRouteImport.update({
   path: '/cursos/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAlunosRoute =
+  AuthenticatedAdminAlunosRouteImport.update({
+    id: '/alunos',
+    path: '/alunos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminConfiguracoesRoute =
+  AuthenticatedAdminConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCursosRoute =
+  AuthenticatedAdminCursosRouteImport.update({
+    id: '/cursos',
+    path: '/cursos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminInscricoesRoute =
+  AuthenticatedAdminInscricoesRouteImport.update({
+    id: '/inscricoes',
+    path: '/inscricoes',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPagamentosRoute =
+  AuthenticatedAdminPagamentosRouteImport.update({
+    id: '/pagamentos',
+    path: '/pagamentos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminRelatoriosRoute =
+  AuthenticatedAdminRelatoriosRouteImport.update({
+    id: '/relatorios',
+    path: '/relatorios',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminTurmasRoute =
+  AuthenticatedAdminTurmasRouteImport.update({
+    id: '/turmas',
+    path: '/turmas',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedInscricaoCourseIdRoute =
   AuthenticatedInscricaoCourseIdRouteImport.update({
     id: '/inscricao/$courseId',
     path: '/inscricao/$courseId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPagamentoRegistrationIdRoute =
+  AuthenticatedPagamentoRegistrationIdRouteImport.update({
+    id: '/pagamento/$registrationId',
+    path: '/pagamento/$registrationId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
@@ -76,22 +138,39 @@ export interface FileRoutesByFullPath {
   '/contactos': typeof ContactosRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/minha-conta': typeof AuthenticatedMinhaContaRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos/': typeof CursosIndexRoute
+  '/admin/alunos': typeof AuthenticatedAdminAlunosRoute
+  '/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
+  '/admin/cursos': typeof AuthenticatedAdminCursosRoute
+  '/admin/inscricoes': typeof AuthenticatedAdminInscricoesRoute
+  '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/admin/relatorios': typeof AuthenticatedAdminRelatoriosRoute
+  '/admin/turmas': typeof AuthenticatedAdminTurmasRoute
   '/inscricao/$courseId': typeof AuthenticatedInscricaoCourseIdRoute
+  '/pagamento/$registrationId': typeof AuthenticatedPagamentoRegistrationIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contactos': typeof ContactosRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/minha-conta': typeof AuthenticatedMinhaContaRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos': typeof CursosIndexRoute
+  '/admin/alunos': typeof AuthenticatedAdminAlunosRoute
+  '/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
+  '/admin/cursos': typeof AuthenticatedAdminCursosRoute
+  '/admin/inscricoes': typeof AuthenticatedAdminInscricoesRoute
+  '/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/admin/relatorios': typeof AuthenticatedAdminRelatoriosRoute
+  '/admin/turmas': typeof AuthenticatedAdminTurmasRoute
   '/inscricao/$courseId': typeof AuthenticatedInscricaoCourseIdRoute
+  '/pagamento/$registrationId': typeof AuthenticatedPagamentoRegistrationIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,11 +179,20 @@ export interface FileRoutesById {
   '/contactos': typeof ContactosRoute
   '/login': typeof LoginRoute
   '/sobre': typeof SobreRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/minha-conta': typeof AuthenticatedMinhaContaRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos/': typeof CursosIndexRoute
+  '/_authenticated/admin/alunos': typeof AuthenticatedAdminAlunosRoute
+  '/_authenticated/admin/configuracoes': typeof AuthenticatedAdminConfiguracoesRoute
+  '/_authenticated/admin/cursos': typeof AuthenticatedAdminCursosRoute
+  '/_authenticated/admin/inscricoes': typeof AuthenticatedAdminInscricoesRoute
+  '/_authenticated/admin/pagamentos': typeof AuthenticatedAdminPagamentosRoute
+  '/_authenticated/admin/relatorios': typeof AuthenticatedAdminRelatoriosRoute
+  '/_authenticated/admin/turmas': typeof AuthenticatedAdminTurmasRoute
   '/_authenticated/inscricao/$courseId': typeof AuthenticatedInscricaoCourseIdRoute
+  '/_authenticated/pagamento/$registrationId': typeof AuthenticatedPagamentoRegistrationIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,18 +205,35 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/cursos/$slug'
     | '/cursos/'
+    | '/admin/alunos'
+    | '/admin/configuracoes'
+    | '/admin/cursos'
+    | '/admin/inscricoes'
+    | '/admin/pagamentos'
+    | '/admin/relatorios'
+    | '/admin/turmas'
     | '/inscricao/$courseId'
+    | '/pagamento/$registrationId'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/contactos'
     | '/login'
     | '/sobre'
-    | '/admin'
     | '/minha-conta'
     | '/cursos/$slug'
     | '/cursos'
+    | '/admin/alunos'
+    | '/admin/configuracoes'
+    | '/admin/cursos'
+    | '/admin/inscricoes'
+    | '/admin/pagamentos'
+    | '/admin/relatorios'
+    | '/admin/turmas'
     | '/inscricao/$courseId'
+    | '/pagamento/$registrationId'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -140,7 +245,16 @@ export interface FileRouteTypes {
     | '/_authenticated/minha-conta'
     | '/cursos/$slug'
     | '/cursos/'
+    | '/_authenticated/admin/alunos'
+    | '/_authenticated/admin/configuracoes'
+    | '/_authenticated/admin/cursos'
+    | '/_authenticated/admin/inscricoes'
+    | '/_authenticated/admin/pagamentos'
+    | '/_authenticated/admin/relatorios'
+    | '/_authenticated/admin/turmas'
     | '/_authenticated/inscricao/$courseId'
+    | '/_authenticated/pagamento/$registrationId'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -218,6 +332,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CursosSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/alunos': {
+      id: '/_authenticated/admin/alunos'
+      path: '/alunos'
+      fullPath: '/admin/alunos'
+      preLoaderRoute: typeof AuthenticatedAdminAlunosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/configuracoes': {
+      id: '/_authenticated/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AuthenticatedAdminConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/cursos': {
+      id: '/_authenticated/admin/cursos'
+      path: '/cursos'
+      fullPath: '/admin/cursos'
+      preLoaderRoute: typeof AuthenticatedAdminCursosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/inscricoes': {
+      id: '/_authenticated/admin/inscricoes'
+      path: '/inscricoes'
+      fullPath: '/admin/inscricoes'
+      preLoaderRoute: typeof AuthenticatedAdminInscricoesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/pagamentos': {
+      id: '/_authenticated/admin/pagamentos'
+      path: '/pagamentos'
+      fullPath: '/admin/pagamentos'
+      preLoaderRoute: typeof AuthenticatedAdminPagamentosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/relatorios': {
+      id: '/_authenticated/admin/relatorios'
+      path: '/relatorios'
+      fullPath: '/admin/relatorios'
+      preLoaderRoute: typeof AuthenticatedAdminRelatoriosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/turmas': {
+      id: '/_authenticated/admin/turmas'
+      path: '/turmas'
+      fullPath: '/admin/turmas'
+      preLoaderRoute: typeof AuthenticatedAdminTurmasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/inscricao/$courseId': {
       id: '/_authenticated/inscricao/$courseId'
       path: '/inscricao/$courseId'
@@ -225,19 +395,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInscricaoCourseIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pagamento/$registrationId': {
+      id: '/_authenticated/pagamento/$registrationId'
+      path: '/pagamento/$registrationId'
+      fullPath: '/pagamento/$registrationId'
+      preLoaderRoute: typeof AuthenticatedPagamentoRegistrationIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAlunosRoute: typeof AuthenticatedAdminAlunosRoute
+  AuthenticatedAdminConfiguracoesRoute: typeof AuthenticatedAdminConfiguracoesRoute
+  AuthenticatedAdminCursosRoute: typeof AuthenticatedAdminCursosRoute
+  AuthenticatedAdminInscricoesRoute: typeof AuthenticatedAdminInscricoesRoute
+  AuthenticatedAdminPagamentosRoute: typeof AuthenticatedAdminPagamentosRoute
+  AuthenticatedAdminRelatoriosRoute: typeof AuthenticatedAdminRelatoriosRoute
+  AuthenticatedAdminTurmasRoute: typeof AuthenticatedAdminTurmasRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAlunosRoute: AuthenticatedAdminAlunosRoute,
+  AuthenticatedAdminConfiguracoesRoute: AuthenticatedAdminConfiguracoesRoute,
+  AuthenticatedAdminCursosRoute: AuthenticatedAdminCursosRoute,
+  AuthenticatedAdminInscricoesRoute: AuthenticatedAdminInscricoesRoute,
+  AuthenticatedAdminPagamentosRoute: AuthenticatedAdminPagamentosRoute,
+  AuthenticatedAdminRelatoriosRoute: AuthenticatedAdminRelatoriosRoute,
+  AuthenticatedAdminTurmasRoute: AuthenticatedAdminTurmasRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedMinhaContaRoute: typeof AuthenticatedMinhaContaRoute
   AuthenticatedInscricaoCourseIdRoute: typeof AuthenticatedInscricaoCourseIdRoute
+  AuthenticatedPagamentoRegistrationIdRoute: typeof AuthenticatedPagamentoRegistrationIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedMinhaContaRoute: AuthenticatedMinhaContaRoute,
   AuthenticatedInscricaoCourseIdRoute: AuthenticatedInscricaoCourseIdRoute,
+  AuthenticatedPagamentoRegistrationIdRoute:
+    AuthenticatedPagamentoRegistrationIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
