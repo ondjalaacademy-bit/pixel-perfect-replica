@@ -47,3 +47,12 @@ export function StatusBadge({ status }: { status: string }) {
           : "bg-warning text-warning-foreground";
   return <Badge className={tone}>{status}</Badge>;
 }
+
+export function Field({ label, children, className }: { label: string; children: ReactNode; className?: string }) {
+  return (
+    <div className={`space-y-1.5 ${className ?? ""}`}>
+      <label className="text-sm font-medium leading-none">{label}</label>
+      {children}
+    </div>
+  );
+}

@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { formatKz } from "@/lib/format";
-import { AdminHeader, Panel, EmptyRow, th, td } from "@/components/admin/AdminUI";
+import { AdminHeader, Panel, EmptyRow, Field, th, td } from "@/components/admin/AdminUI";
 
 export const Route = createFileRoute("/_authenticated/admin/cursos")({ component: AdminCourses });
 
@@ -60,7 +60,7 @@ function AdminCourses() {
     if (!course.title.trim()) return toast.error("Indica o nome do curso.");
     setSaving(true);
     try {
-      const payload = { ...course, slug: course.slug || slugify(course.title), price: Number(course.price) };
+      const payload = { ...course, objectives: course.objectives.map((o) => o.trim()).filter(Boolean), slug: course.slug || slugify(course.title), price: Number(course.price) };
       const { id, ...rest } = payload;
       const res = id
         ? await supabase.from("courses").update(rest).eq("id", id).select("id").single()
@@ -157,7 +157,7 @@ function AdminCourses() {
               </div>
               <div className="flex justify-end gap-2 sm:col-span-2">
                 <Button variant="ghost" onClick={() => setEditing(null)}>Cancelar</Button>
-                <Button disabled={saving} onClick={() => { set({ objectives: editing.course.objectives.map((o) => o.trim()).filter(Boolean) }); save(); }}>{saving ? "A guardar…" : "Guardar"}</Button>
+                <Button disabled={saving} onClick={save}>{saving ? "A guardar…" : "Guardar"}</Button>
               </div>
             </div>
           )}
@@ -167,11 +167,3 @@ function AdminCourses() {
   );
 }
 
-export function Field({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
-  return (
-    <div className={`space-y-1.5 ${className ?? ""}`}>
-      <Label>{label}</Label>
-      {children}
-    </div>
-  );
-}
