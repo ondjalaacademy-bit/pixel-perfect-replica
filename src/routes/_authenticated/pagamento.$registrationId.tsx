@@ -42,9 +42,9 @@ function PaymentPage() {
   const canSend = !last || last.status === "falhado";
 
   async function submit() {
-    if (!file || !reg) return toast.error("Escolhe o ficheiro do comprovativo.");
-    if (file.size > MAX) return toast.error("O ficheiro não pode ter mais de 5 MB.");
-    if (!/^(image\/|application\/pdf)/.test(file.type)) return toast.error("Envia uma imagem ou um PDF.");
+    if (!file || !reg) { toast.error("Escolhe o ficheiro do comprovativo."); return; }
+    if (file.size > MAX) { toast.error("O ficheiro não pode ter mais de 5 MB."); return; }
+    if (!/^(image\/|application\/pdf)/.test(file.type)) { toast.error("Envia uma imagem ou um PDF."); return; }
     setSending(true);
     try {
       const ext = file.name.split(".").pop()?.toLowerCase() || "pdf";

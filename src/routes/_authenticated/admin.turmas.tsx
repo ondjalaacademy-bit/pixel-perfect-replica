@@ -32,13 +32,13 @@ function AdminClasses() {
 
   async function save() {
     if (!editing) return;
-    if (!editing.course_id || !editing.name.trim()) return toast.error("Escolhe o curso e indica o nome da turma.");
+    if (!editing.course_id || !editing.name.trim()) { toast.error("Escolhe o curso e indica o nome da turma."); return; }
     setSaving(true);
     const { id, ...rest } = editing;
     const payload = { ...rest, start_date: rest.start_date || null, seats: Number(rest.seats) };
     const res = id ? await supabase.from("classes").update(payload).eq("id", id) : await supabase.from("classes").insert(payload);
     setSaving(false);
-    if (res.error) return toast.error(res.error.message.includes("row-level") ? "Só administradores podem alterar turmas." : res.error.message);
+    if (res.error) { toast.error(res.error.message.includes("row-level") ? "Só administradores podem alterar turmas." : res.error.message); return; }
     toast.success("Turma guardada.");
     setEditing(null);
     qc.invalidateQueries({ queryKey: ["admin-classes"] });

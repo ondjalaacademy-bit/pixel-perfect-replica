@@ -27,7 +27,7 @@ function AdminPayments() {
 
   async function openProof(path: string) {
     const { data, error } = await supabase.storage.from("comprovativos").createSignedUrl(path, 300);
-    if (error || !data) return toast.error("Não foi possível abrir o comprovativo.");
+    if (error || !data) { toast.error("Não foi possível abrir o comprovativo."); return; }
     window.open(data.signedUrl, "_blank", "noopener");
   }
 
@@ -42,7 +42,7 @@ function AdminPayments() {
       if (reg.error) toast.error(reg.error.message);
     }
     setBusy(null);
-    if (pay.error) return toast.error(pay.error.message);
+    if (pay.error) { toast.error(pay.error.message); return; }
     toast.success(approve ? "Pagamento confirmado e inscrição confirmada." : "Pagamento rejeitado.");
     ["admin-payments", "admin-overview", "admin-registrations"].forEach((k) => qc.invalidateQueries({ queryKey: [k] }));
   }

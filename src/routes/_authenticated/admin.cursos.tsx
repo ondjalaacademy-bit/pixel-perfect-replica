@@ -57,7 +57,7 @@ function AdminCourses() {
   async function save() {
     if (!editing) return;
     const { course, modules } = editing;
-    if (!course.title.trim()) return toast.error("Indica o nome do curso.");
+    if (!course.title.trim()) { toast.error("Indica o nome do curso."); return; }
     setSaving(true);
     try {
       const payload = { ...course, objectives: course.objectives.map((o) => o.trim()).filter(Boolean), slug: course.slug || slugify(course.title), price: Number(course.price) };
