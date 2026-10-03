@@ -67,9 +67,10 @@ function RegistrationPage() {
           municipality: form.municipality,
         },
       }),
-    onSuccess: () => {
-      toast.success("Inscrição registada. O pagamento será o passo seguinte.");
-      navigate({ to: "/minha-conta" });
+    onSuccess: (res: any) => {
+      toast.success("Inscrição registada. Falta apenas o pagamento.");
+      if (res?.id) navigate({ to: "/pagamento/$registrationId", params: { registrationId: res.id } });
+      else navigate({ to: "/minha-conta" });
     },
     onError: (err: any) => toast.error(err?.message ?? "Não foi possível concluir a inscrição."),
   });

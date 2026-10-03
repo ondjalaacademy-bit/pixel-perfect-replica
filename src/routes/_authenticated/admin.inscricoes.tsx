@@ -29,7 +29,7 @@ function AdminRegistrations() {
 
   async function changeStatus(id: string, status: (typeof STATUSES)[number]) {
     const { error } = await supabase.from("registrations").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Estado atualizado.");
     qc.invalidateQueries({ queryKey: ["admin-registrations"] });
     qc.invalidateQueries({ queryKey: ["admin-overview"] });

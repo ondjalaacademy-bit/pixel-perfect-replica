@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- Admin CRUD pages query the browser database client directly; access is enforced by row-level security (admin writes courses/classes/settings, staff reviews registrations/payments). Why: permissions live in the backend, not the UI.
+- Manual payments: student uploads proof to private 'comprovativos' storage under their user-id folder and inserts a 'pendente' payment; staff confirms. Why: works until Multicaixa integration exists.

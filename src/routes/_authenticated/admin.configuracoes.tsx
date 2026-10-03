@@ -28,7 +28,7 @@ function AdminSettings() {
     setSaving(true);
     const { error } = await supabase.from("settings").update(form).eq("id", 1);
     setSaving(false);
-    if (error) return toast.error(error.message.includes("row-level") ? "Só administradores podem alterar as configurações." : error.message);
+    if (error) { toast.error(error.message.includes("row-level") ? "Só administradores podem alterar as configurações." : error.message); return; }
     toast.success("Configurações guardadas.");
     qc.invalidateQueries({ queryKey: ["settings"] });
   }

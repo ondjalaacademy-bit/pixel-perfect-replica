@@ -81,7 +81,7 @@ function StudentArea() {
 
           <div className="mt-6 grid gap-5 md:grid-cols-2">
             {(registrations ?? []).map((r: any) => {
-              const payment = r.payments?.[0];
+              const payment = r.payments?.[r.payments.length - 1];
               return (
                 <article key={r.id} className="rounded-xl border border-border bg-card p-6">
                   <div className="flex items-start justify-between gap-4">
@@ -118,6 +118,13 @@ function StudentArea() {
                       </dd>
                     </div>
                   </dl>
+                  {r.status !== "cancelada" && payment?.status !== "pago" && (
+                    <Button asChild size="sm" className="mt-5 bg-accent text-accent-foreground hover:bg-accent/90">
+                      <Link to="/pagamento/$registrationId" params={{ registrationId: r.id }}>
+                        {payment?.status === "pendente" ? "Ver estado do pagamento" : "Pagar / enviar comprovativo"}
+                      </Link>
+                    </Button>
+                  )}
                 </article>
               );
             })}
