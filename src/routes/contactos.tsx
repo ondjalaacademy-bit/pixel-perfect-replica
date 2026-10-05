@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
+import { SOCIAL } from "@/lib/social";
 
 export const Route = createFileRoute("/contactos")({
   head: () => ({
@@ -32,7 +33,7 @@ function Contacts() {
       <section className="section-y">
         <div className="mx-auto grid max-w-3xl gap-5 px-4 sm:grid-cols-3 md:px-6">
           {[
-            { icon: Phone, label: "Telefone / WhatsApp", value: "A definir" },
+            { icon: Phone, label: "WhatsApp", value: "Enviar mensagem", href: SOCIAL[0].url },
             { icon: Mail, label: "Email", value: "A definir" },
             { icon: MapPin, label: "Endereço", value: "Luanda, Angola" },
           ].map((c) => (
@@ -41,14 +42,25 @@ function Contacts() {
               <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                 {c.label}
               </p>
-              <p className="mt-1 text-sm font-medium text-primary">{c.value}</p>
+              {"href" in c && c.href ? (
+                <a href={c.href} target="_blank" rel="noopener noreferrer" className="mt-1 block text-sm font-medium text-accent hover:underline">{c.value}</a>
+              ) : (
+                <p className="mt-1 text-sm font-medium text-primary">{c.value}</p>
+              )}
             </div>
           ))}
         </div>
         <p className="mx-auto mt-8 max-w-3xl rounded-xl border border-dashed border-border bg-muted/50 px-4 py-5 text-sm text-muted-foreground md:px-6">
-          Ainda não tenho os contactos oficiais da Ondjala Academy. Envia o telefone, o email e o
-          endereço reais e eu coloco-os aqui.
+          Ainda faltam o email e o endereço oficiais da Ondjala Academy.
         </p>
+        <div className="mx-auto mt-8 max-w-3xl px-4 md:px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">Segue-nos</p>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {SOCIAL.map((s) => (
+              <a key={s.key} href={s.url} target="_blank" rel="noopener noreferrer" className="rounded-full border border-border px-4 py-2 text-sm font-medium text-primary hover:border-accent hover:text-accent">{s.label}</a>
+            ))}
+          </div>
+        </div>
       </section>
     </SiteLayout>
   );

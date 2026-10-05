@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "@/components/brand/Logo";
+import { SocialIcons } from "@/components/brand/SocialIcons";
 
 export function SiteFooter() {
   return (
@@ -10,6 +11,7 @@ export function SiteFooter() {
           <p className="mt-4 text-sm text-primary-foreground/70">
             Aprende. Inova. Transforma. Lidera o futuro.
           </p>
+          <SocialIcons className="mt-5 text-primary-foreground/80" />
         </div>
 
         <div className="grid grid-cols-2 gap-10 text-sm">
@@ -50,8 +52,10 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="border-t border-primary-foreground/10 py-5 text-center text-xs text-primary-foreground/60">
-        © {new Date().getFullYear()} Ondjala Academy. Todos os direitos reservados.
+      <div className="flex flex-col items-center gap-2 border-t border-primary-foreground/10 py-5 text-xs text-primary-foreground/60 sm:flex-row sm:justify-center sm:gap-6">
+        <span>© {new Date().getFullYear()} Ondjala Academy. Todos os direitos reservados.</span>
+        <Link to="/termos" className="hover:text-accent">Termos de uso</Link>
+        <Link to="/privacidade" className="hover:text-accent">Política de privacidade</Link>
       </div>
     </footer>
   );
