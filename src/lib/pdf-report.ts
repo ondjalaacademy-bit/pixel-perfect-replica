@@ -40,7 +40,7 @@ export async function downloadPdfReport(opts: {
     startY: 138,
     head: [opts.head.map(clean)],
     body: opts.rows.map((r) => r.map((c) => clean(String(c)))),
-    foot: opts.foot ? [opts.foot.map((c) => clean(String(c)))] : undefined,
+    ...(opts.foot ? { foot: [opts.foot.map((c) => clean(String(c)))] } : {}),
     theme: "grid",
     styles: { font: "helvetica", fontSize: 8.5, cellPadding: 5, lineColor: [225, 228, 235] },
     headStyles: { fillColor: navy, textColor: 255, fontStyle: "bold" },
