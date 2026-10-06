@@ -91,7 +91,7 @@ function LoginPage() {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="hidden flex-col justify-between bg-primary p-12 text-primary-foreground lg:flex">
-        <Logo tone="light" />
+        <Logo tone="light" size="lg" />
         <div>
           <h2 className="font-display text-3xl font-extrabold leading-tight">
             Aprende. Inova. Transforma. Lidera o futuro.

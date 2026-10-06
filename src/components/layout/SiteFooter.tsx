@@ -7,7 +7,7 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-primary text-primary-foreground">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 md:flex-row md:items-start md:justify-between md:px-6">
         <div className="max-w-xs">
-          <Logo tone="light" />
+          <Logo tone="light" size="lg" />
           <p className="mt-4 text-sm text-primary-foreground/70">
             Aprende. Inova. Transforma. Lidera o futuro.
           </p>
