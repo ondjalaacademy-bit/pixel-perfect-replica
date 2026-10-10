@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 - Admin CRUD pages query the browser database client directly; access is enforced by row-level security (admin writes courses/classes/settings, staff reviews registrations/payments). Why: permissions live in the backend, not the UI.
 - Manual payments: student uploads proof to private 'comprovativos' storage under their user-id folder and inserts a 'pendente' payment; staff confirms. Why: works until Multicaixa integration exists.
+- Keep home-page video playback and scroll effects in a dedicated browser-enhanced hero component, with CDN asset pointers and a static reduced-motion fallback. Why: isolates media lifecycle from course loading and keeps the first screen accessible.
