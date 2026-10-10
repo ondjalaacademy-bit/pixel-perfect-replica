@@ -4,7 +4,7 @@ import { SiteLayout } from "@/components/layout/SiteLayout";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { Button } from "@/components/ui/button";
 import { listCourses } from "@/lib/courses.functions";
-import heroImage from "@/assets/hero-ondjala.jpg";
+import { CinematicHero } from "@/components/layout/CinematicHero";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -51,47 +51,10 @@ function Home() {
 
   return (
     <SiteLayout>
-      {/* Hero */}
-      <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 md:grid-cols-2 md:px-6 md:py-24">
-          <div>
-            <p className="eyebrow">Ondjala Academy</p>
-            <h1 className="mt-4 font-display text-4xl font-extrabold leading-[1.1] md:text-5xl">
-              Aprende. Inova. Transforma. Lidera o Futuro.
-            </h1>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-primary-foreground/75">
-              Formação prática para desenvolver competências, criar oportunidades e transformar
-              conhecimento em resultados.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link to="/cursos">Explorar cursos</Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
-              >
-                <Link to="/cursos">Inscrever-me</Link>
-              </Button>
-            </div>
-          </div>
-
-          <div className="relative">
-            <img
-              src={heroImage}
-              alt="Estudantes da Ondjala Academy em formação"
-              width={1600}
-              height={1200}
-              className="w-full rounded-2xl object-cover shadow-lift"
-            />
-          </div>
-        </div>
-      </section>
+      <CinematicHero />
 
       {/* Áreas de formação */}
-      <section className="section-y">
+      <section id="areas-formacao" className="section-y scroll-mt-16">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <p className="eyebrow">Áreas de formação</p>
           <h2 className="mt-3 max-w-xl text-3xl font-bold text-primary">
