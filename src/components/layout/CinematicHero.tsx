@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import videoAsset from "@/assets/ondjala-hero.mp4.asset.json";
+import webmAsset from "@/assets/ondjala-hero.webm.asset.json";
 import posterAsset from "@/assets/ondjala-hero-poster.jpg.asset.json";
 
 export function CinematicHero() {
@@ -59,6 +60,7 @@ export function CinematicHero() {
       <div className="cinematic-media" aria-hidden="true">
         <video ref={videoRef} poster={posterAsset.url} muted={muted} loop playsInline preload="metadata"
           onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}>
+          <source src={webmAsset.url} type="video/webm" />
           <source src={videoAsset.url} type="video/mp4" />
         </video>
       </div>
