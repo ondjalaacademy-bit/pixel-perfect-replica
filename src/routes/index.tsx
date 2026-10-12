@@ -62,7 +62,7 @@ function Home() {
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <p className="eyebrow">Áreas de formação</p>
           <h2 className="mt-3 max-w-xl text-3xl font-bold text-primary">
-            Quatro pilares para construir o teu futuro profissional
+            Escolhe a área e descobre todas as formações
           </h2>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
