@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ShoppingCart, Megaphone, Ship, Sparkles, BookOpen, Wrench, TrendingUp } from "lucide-react";
+import { ShoppingCart, Megaphone, Ship, Sparkles, Layers, BookOpen, Wrench, TrendingUp } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { Button } from "@/components/ui/button";
-import { listCourses } from "@/lib/courses.functions";
+import { listCourses, listAreas } from "@/lib/courses.functions";
 import { CinematicHero } from "@/components/layout/CinematicHero";
 
 export const Route = createFileRoute("/")({
@@ -25,16 +25,19 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: () => listCourses(),
+  loader: async () => {
+    const [courses, areas] = await Promise.all([listCourses(), listAreas()]);
+    return { courses, areas };
+  },
   component: Home,
 });
 
-const pilares = [
-  { icon: ShoppingCart, title: "E-Commerce", slug: "e-commerce" },
-  { icon: Megaphone, title: "Marketing", slug: "marketing" },
-  { icon: Ship, title: "Importação", slug: "importacao" },
-  { icon: Sparkles, title: "Inteligência Artificial", slug: "inteligencia-artificial" },
-];
+const icons: Record<string, typeof Layers> = {
+  "e-commerce": ShoppingCart,
+  marketing: Megaphone,
+  importacao: Ship,
+  "inteligencia-artificial": Sparkles,
+};
 
 const valores = [
   { icon: BookOpen, title: "Conhecimento", text: "Conteúdo estruturado e relevante." },
@@ -47,7 +50,8 @@ const valores = [
 ];
 
 function Home() {
-  const courses = Route.useLoaderData();
+  const { courses, areas } = Route.useLoaderData();
+  const pilares = areas.map((a) => ({ slug: a.slug, title: a.name, icon: icons[a.slug] ?? Layers }));
 
   return (
     <SiteLayout>
@@ -58,22 +62,22 @@ function Home() {
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <p className="eyebrow">Áreas de formação</p>
           <h2 className="mt-3 max-w-xl text-3xl font-bold text-primary">
-            Quatro pilares para construir o teu futuro profissional
+            Escolhe a área e descobre todas as formações
           </h2>
 
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {pilares.map((p) => (
               <Link
                 key={p.slug}
-                to="/cursos/$slug"
-                params={{ slug: p.slug }}
+                to="/cursos"
+                search={{ area: p.slug }}
                 className="card-elevated block p-6"
               >
                 <span className="grid size-11 place-items-center rounded-lg bg-accent-soft">
                   <p.icon className="size-5 text-accent" />
                 </span>
                 <h3 className="mt-5 text-base font-bold text-primary">{p.title}</h3>
-                <span className="mt-2 inline-block text-sm text-muted-foreground">Ver programa</span>
+                <span className="mt-2 inline-block text-sm text-muted-foreground">Ver formações</span>
               </Link>
             ))}
           </div>

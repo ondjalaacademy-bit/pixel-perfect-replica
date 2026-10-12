@@ -25,6 +25,19 @@ export const listCourses = createServerFn({ method: "GET" }).handler(async () =>
   return (data ?? []) as CourseRow[];
 });
 
+export type AreaRow = Database["public"]["Tables"]["areas"]["Row"];
+
+export const listAreas = createServerFn({ method: "GET" }).handler(async () => {
+  const supabase = publicClient();
+  const { data, error } = await supabase
+    .from("areas")
+    .select("*")
+    .eq("is_published", true)
+    .order("position", { ascending: true });
+  if (error) throw new Error(error.message);
+  return (data ?? []) as AreaRow[];
+});
+
 export const getCourseBySlug = createServerFn({ method: "GET" })
   .inputValidator((data: { slug: string }) => ({ slug: String(data.slug) }))
   .handler(async ({ data }) => {

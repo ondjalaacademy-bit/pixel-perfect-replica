@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      areas: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          is_published: boolean
+          name: string
+          position: number
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_published?: boolean
+          name: string
+          position?: number
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_published?: boolean
+          name?: string
+          position?: number
+          slug?: string
+        }
+        Relationships: []
+      }
       classes: {
         Row: {
           course_id: string
@@ -96,6 +126,7 @@ export type Database = {
       courses: {
         Row: {
           area: string
+          area_id: string | null
           cover_url: string | null
           created_at: string
           currency: string
@@ -107,6 +138,7 @@ export type Database = {
           objectives: string[]
           position: number
           price: number
+          registration_fee: number
           short_description: string
           slug: string
           title: string
@@ -114,6 +146,7 @@ export type Database = {
         }
         Insert: {
           area: string
+          area_id?: string | null
           cover_url?: string | null
           created_at?: string
           currency?: string
@@ -125,6 +158,7 @@ export type Database = {
           objectives?: string[]
           position?: number
           price?: number
+          registration_fee?: number
           short_description?: string
           slug: string
           title: string
@@ -132,6 +166,7 @@ export type Database = {
         }
         Update: {
           area?: string
+          area_id?: string | null
           cover_url?: string | null
           created_at?: string
           currency?: string
@@ -143,12 +178,21 @@ export type Database = {
           objectives?: string[]
           position?: number
           price?: number
+          registration_fee?: number
           short_description?: string
           slug?: string
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "courses_area_id_fkey"
+            columns: ["area_id"]
+            isOneToOne: false
+            referencedRelation: "areas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payments: {
         Row: {

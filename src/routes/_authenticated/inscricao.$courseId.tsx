@@ -242,9 +242,12 @@ function RegistrationPage() {
                 Valor da inscrição
               </span>
               <span className="font-display text-2xl font-extrabold text-primary">
-                {formatKz(course.price)}
+                {formatKz(course.registration_fee)}
               </span>
             </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Investimento do curso: {formatKz(course.price)} (pago à parte, conforme indicação da academia).
+            </p>
 
             <Button
               type="submit"
@@ -255,7 +258,7 @@ function RegistrationPage() {
               {mutation.isPending ? "A registar…" : "Continuar para pagamento"}
             </Button>
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              O pagamento (Multicaixa Express e Referência Multicaixa) será activado na próxima fase.
+              Depois de enviares o comprovativo recebes a ficha de inscrição provisória.
             </p>
           </aside>
         </form>
