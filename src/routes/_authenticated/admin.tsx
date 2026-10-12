@@ -10,6 +10,7 @@ import {
   BarChart3,
   Settings,
   GraduationCap,
+  Layers,
 } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 const menu = [
   { to: "/admin", icon: LayoutDashboard, label: "Dashboard", exact: true },
+  { to: "/admin/areas", icon: Layers, label: "Áreas" },
   { to: "/admin/cursos", icon: BookOpen, label: "Cursos" },
   { to: "/admin/turmas", icon: GraduationCap, label: "Turmas" },
   { to: "/admin/alunos", icon: Users, label: "Alunos" },

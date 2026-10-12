@@ -65,15 +65,15 @@ function Home() {
             {pilares.map((p) => (
               <Link
                 key={p.slug}
-                to="/cursos/$slug"
-                params={{ slug: p.slug }}
+                to="/cursos"
+                search={{ area: p.slug }}
                 className="card-elevated block p-6"
               >
                 <span className="grid size-11 place-items-center rounded-lg bg-accent-soft">
                   <p.icon className="size-5 text-accent" />
                 </span>
                 <h3 className="mt-5 text-base font-bold text-primary">{p.title}</h3>
-                <span className="mt-2 inline-block text-sm text-muted-foreground">Ver programa</span>
+                <span className="mt-2 inline-block text-sm text-muted-foreground">Ver formações</span>
               </Link>
             ))}
           </div>

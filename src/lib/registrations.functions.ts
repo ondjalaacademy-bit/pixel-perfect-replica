@@ -24,7 +24,7 @@ export const createRegistration = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { data: course, error: courseError } = await context.supabase
       .from("courses")
-      .select("id, price")
+      .select("id, registration_fee")
       .eq("id", data.courseId)
       .maybeSingle();
     if (courseError) throw new Error(courseError.message);
@@ -43,7 +43,7 @@ export const createRegistration = createServerFn({ method: "POST" })
         birth_date: data.birthDate || null,
         province: data.province ?? "",
         municipality: data.municipality ?? "",
-        amount: course.price,
+        amount: course.registration_fee,
       })
       .select("id, registration_number")
       .single();
