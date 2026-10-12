@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ShoppingCart, Megaphone, Ship, Sparkles, BookOpen, Wrench, TrendingUp } from "lucide-react";
+import { ShoppingCart, Megaphone, Ship, Sparkles, Layers, BookOpen, Wrench, TrendingUp } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { Button } from "@/components/ui/button";
-import { listCourses } from "@/lib/courses.functions";
+import { listCourses, listAreas } from "@/lib/courses.functions";
 import { CinematicHero } from "@/components/layout/CinematicHero";
 
 export const Route = createFileRoute("/")({
@@ -25,16 +25,19 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: () => listCourses(),
+  loader: async () => {
+    const [courses, areas] = await Promise.all([listCourses(), listAreas()]);
+    return { courses, areas };
+  },
   component: Home,
 });
 
-const pilares = [
-  { icon: ShoppingCart, title: "E-Commerce", slug: "e-commerce" },
-  { icon: Megaphone, title: "Marketing", slug: "marketing" },
-  { icon: Ship, title: "Importação", slug: "importacao" },
-  { icon: Sparkles, title: "Inteligência Artificial", slug: "inteligencia-artificial" },
-];
+const icons: Record<string, typeof Layers> = {
+  "e-commerce": ShoppingCart,
+  marketing: Megaphone,
+  importacao: Ship,
+  "inteligencia-artificial": Sparkles,
+};
 
 const valores = [
   { icon: BookOpen, title: "Conhecimento", text: "Conteúdo estruturado e relevante." },
@@ -47,7 +50,8 @@ const valores = [
 ];
 
 function Home() {
-  const courses = Route.useLoaderData();
+  const { courses, areas } = Route.useLoaderData();
+  const pilares = areas.map((a) => ({ slug: a.slug, title: a.name, icon: icons[a.slug] ?? Layers }));
 
   return (
     <SiteLayout>
