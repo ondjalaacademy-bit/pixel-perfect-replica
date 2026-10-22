@@ -247,3 +247,6 @@
   .cinematic-media, .cinematic-copy { transform: none; will-change: auto; }
   .cinematic-scroll svg { animation: none; }
 }
+#lovable-badge {
+display: none !important;
+}
