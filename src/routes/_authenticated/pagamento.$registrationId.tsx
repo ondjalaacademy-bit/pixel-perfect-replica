@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatKz } from "@/lib/format";
+import { downloadFicha, isOfficial } from "@/lib/ficha-pdf";
 import { StatusBadge } from "@/components/admin/AdminUI";
 
 export const Route = createFileRoute("/_authenticated/pagamento/$registrationId")({
@@ -28,7 +29,7 @@ function PaymentPage() {
     queryKey: ["payment-page", registrationId],
     queryFn: async () => {
       const [reg, settings] = await Promise.all([
-        supabase.from("registrations").select("id, user_id, registration_number, amount, status, courses(title), payments(id, status, created_at)").eq("id", registrationId).maybeSingle(),
+        supabase.from("registrations").select("*, courses(title, price), classes(name, start_date), payments(id, status, created_at)").eq("id", registrationId).maybeSingle(),
         supabase.from("settings").select("*").eq("id", 1).maybeSingle(),
       ]);
       return { reg: reg.data as any, settings: settings.data };
@@ -132,6 +133,22 @@ function PaymentPage() {
                   </div>
                 )}
               </div>
+              {last && last.status !== "falhado" && (
+                <div className="mt-6 rounded-xl border border-accent/40 bg-accent-soft p-6">
+                  <h2 className="font-bold text-primary">
+                    {isOfficial({ paymentStatus: last.status, registrationStatus: reg.status }) ? "Ficha de inscrição oficial" : "Ficha de inscrição provisória"}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {last.status === "pago" ? "O teu pagamento foi confirmado." : "Com o valor pendente até a equipa validar o comprovativo. A ficha oficial é enviada por WhatsApp após a confirmação."}
+                  </p>
+                  <Button className="mt-4" onClick={() => downloadFicha({
+                    registrationNumber: reg.registration_number, createdAt: reg.created_at, fullName: reg.full_name, email: reg.email,
+                    phone: reg.phone, whatsapp: reg.whatsapp, province: reg.province, municipality: reg.municipality,
+                    courseTitle: reg.courses?.title ?? "", className: reg.classes?.name, classStart: reg.classes?.start_date,
+                    registrationFee: reg.amount, coursePrice: reg.courses?.price ?? 0, paymentStatus: last.status, registrationStatus: reg.status,
+                  })}>Descarregar ficha (PDF)</Button>
+                </div>
+              )}
               <Button asChild variant="ghost" className="mt-6"><Link to="/minha-conta">Ir para a minha conta</Link></Button>
             </>
           )}

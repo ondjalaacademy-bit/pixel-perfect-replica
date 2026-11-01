@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { formatDate, formatKz } from "@/lib/format";
+import { downloadFicha, whatsappOfficialLink, type FichaData } from "@/lib/ficha-pdf";
 import { AdminHeader, Panel, EmptyRow, StatusBadge, th, td } from "@/components/admin/AdminUI";
 
 export const Route = createFileRoute("/_authenticated/admin/pagamentos")({ component: AdminPayments });
@@ -18,7 +19,7 @@ function AdminPayments() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("payments")
-        .select("*, registrations(id, registration_number, full_name, email, courses(title))")
+        .select("*, registrations(*, courses(title, price), classes(name, start_date))")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
@@ -43,10 +44,19 @@ function AdminPayments() {
     }
     setBusy(null);
     if (pay.error) { toast.error(pay.error.message); return; }
-    toast.success(approve ? "Pagamento confirmado e inscrição confirmada." : "Pagamento rejeitado.");
+    toast.success(approve ? "Confirmado. Descarrega a ficha oficial e envia por WhatsApp." : "Pagamento rejeitado.");
     ["admin-payments", "admin-overview", "admin-registrations"].forEach((k) => qc.invalidateQueries({ queryKey: [k] }));
   }
 
+  const ficha = (p: any): FichaData => {
+    const r = p.registrations ?? {};
+    return {
+      registrationNumber: r.registration_number, createdAt: r.created_at, fullName: r.full_name ?? "", email: r.email ?? "",
+      phone: r.phone ?? "", whatsapp: r.whatsapp ?? "", province: r.province ?? "", municipality: r.municipality ?? "",
+      courseTitle: r.courses?.title ?? "", className: r.classes?.name, classStart: r.classes?.start_date,
+      registrationFee: p.amount, coursePrice: r.courses?.price ?? 0, paymentStatus: p.status, registrationStatus: r.status,
+    };
+  };
   const rows = (data ?? []).filter((p: any) => filter === "todos" || p.status === filter);
 
   return (
@@ -76,6 +86,12 @@ function AdminPayments() {
                 <td className={td}>{p.proof_path ? <Button size="sm" variant="link" className="h-auto p-0" onClick={() => openProof(p.proof_path)}>Ver ficheiro</Button> : "—"}</td>
                 <td className={td}><StatusBadge status={p.status} /></td>
                 <td className={`${td} whitespace-nowrap text-right`}>
+                  {p.status !== "pendente" && (
+                    <div className="flex justify-end gap-2">
+                      <Button size="sm" variant="outline" onClick={() => downloadFicha(ficha(p))}>Ficha PDF</Button>
+                      <Button size="sm" className="bg-success text-success-foreground hover:bg-success/90" disabled={!(p.registrations?.whatsapp || p.registrations?.phone)} onClick={() => window.open(whatsappOfficialLink(ficha(p)), "_blank")}>Enviar por WhatsApp</Button>
+                    </div>
+                  )}
                   {p.status === "pendente" && (
                     <div className="flex justify-end gap-2">
                       <Button size="sm" variant="outline" disabled={busy === p.id} onClick={() => decide(p, false)}>Rejeitar</Button>
