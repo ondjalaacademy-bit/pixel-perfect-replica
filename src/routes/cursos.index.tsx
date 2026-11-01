@@ -7,7 +7,7 @@ type Search = { area?: string };
 
 export const Route = createFileRoute("/cursos/")({
   validateSearch: (s: Record<string, unknown>): Search =>
-    typeof s.area === "string" && s.area ? { area: s.area } : {},
+    typeof s["area"] === "string" && s["area"] ? { area: s["area"] as string } : {},
   head: () => ({
     meta: [
       { title: "Cursos — Ondjala Academy" },

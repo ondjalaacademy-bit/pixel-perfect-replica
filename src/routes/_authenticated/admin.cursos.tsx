@@ -25,6 +25,8 @@ type Course = {
   duration: string;
   modality: string;
   price: number;
+  registration_fee: number;
+  area_id: string | null;
   is_published: boolean;
   position: number;
 };
@@ -32,7 +34,7 @@ type Mod = { id?: string; title: string; description: string };
 
 const empty: Course = {
   slug: "", title: "", area: "", short_description: "", description: "", objectives: [],
-  duration: "", modality: "Presencial", price: 0, is_published: true, position: 0,
+  duration: "", modality: "Presencial", price: 0, registration_fee: 0, area_id: null, is_published: true, position: 0,
 };
 
 const slugify = (s: string) =>
@@ -51,6 +53,10 @@ function AdminCourses() {
       return data;
     },
   });
+  const { data: areas } = useQuery({
+    queryKey: ["admin-areas-list"],
+    queryFn: async () => (await supabase.from("areas").select("id, name").order("position")).data ?? [],
+  });
   const [editing, setEditing] = useState<{ course: Course; modules: Mod[] } | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -60,7 +66,7 @@ function AdminCourses() {
     if (!course.title.trim()) { toast.error("Indica o nome do curso."); return; }
     setSaving(true);
     try {
-      const payload = { ...course, objectives: course.objectives.map((o) => o.trim()).filter(Boolean), slug: course.slug || slugify(course.title), price: Number(course.price) };
+      const payload = { ...course, objectives: course.objectives.map((o) => o.trim()).filter(Boolean), slug: course.slug || slugify(course.title), price: Number(course.price), registration_fee: Number(course.registration_fee), area: areas?.find((a) => a.id === course.area_id)?.name ?? course.area };
       const { id, ...rest } = payload;
       const res = id
         ? await supabase.from("courses").update(rest).eq("id", id).select("id").single()
@@ -95,24 +101,24 @@ function AdminCourses() {
       />
       <Panel>
         <table className="w-full text-left text-sm">
-          <thead><tr><th className={th}>Curso</th><th className={th}>Área</th><th className={th}>Duração</th><th className={th}>Preço</th><th className={th}>Visível</th><th className={th}></th></tr></thead>
+          <thead><tr><th className={th}>Curso</th><th className={th}>Área</th><th className={th}>Duração</th><th className={th}>Inscrição</th><th className={th}>Investimento</th><th className={th}>Visível</th><th className={th}></th></tr></thead>
           <tbody>
             {(data ?? []).map((c: any) => (
               <tr key={c.id} className="border-t border-border">
                 <td className={td}><span className="font-medium">{c.title}</span><span className="block text-xs text-muted-foreground">/{c.slug}</span></td>
                 <td className={td}>{c.area}</td>
                 <td className={td}>{c.duration}</td>
-                <td className={td}>{formatKz(c.price)}</td>
+                <td className={td}>{formatKz(c.registration_fee)}</td><td className={td}>{formatKz(c.price)}</td>
                 <td className={td}>{c.is_published ? "Sim" : "Não"}</td>
                 <td className={`${td} text-right`}>
                   <Button size="sm" variant="outline" onClick={() => setEditing({
-                    course: { id: c.id, slug: c.slug, title: c.title, area: c.area, short_description: c.short_description, description: c.description, objectives: c.objectives ?? [], duration: c.duration, modality: c.modality, price: Number(c.price), is_published: c.is_published, position: c.position },
+                    course: { id: c.id, slug: c.slug, title: c.title, area: c.area, short_description: c.short_description, description: c.description, objectives: c.objectives ?? [], duration: c.duration, modality: c.modality, price: Number(c.price), registration_fee: Number(c.registration_fee), area_id: c.area_id, is_published: c.is_published, position: c.position },
                     modules: [...(c.course_modules ?? [])].sort((a: any, b: any) => a.position - b.position).map((m: any) => ({ title: m.title, description: m.description })),
                   })}>Editar</Button>
                 </td>
               </tr>
             ))}
-            {!isLoading && !data?.length && <EmptyRow cols={6} text="Ainda não existem cursos." />}
+            {!isLoading && !data?.length && <EmptyRow cols={7} text="Ainda não existem cursos." />}
           </tbody>
         </table>
       </Panel>
@@ -124,10 +130,16 @@ function AdminCourses() {
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Nome" className="sm:col-span-2"><Input value={editing.course.title} onChange={(e) => set({ title: e.target.value })} /></Field>
               <Field label="Endereço (slug)"><Input value={editing.course.slug} placeholder={slugify(editing.course.title)} onChange={(e) => set({ slug: slugify(e.target.value) })} /></Field>
-              <Field label="Área"><Input value={editing.course.area} onChange={(e) => set({ area: e.target.value })} /></Field>
+              <Field label="Área">
+                <select className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={editing.course.area_id ?? ""} onChange={(e) => set({ area_id: e.target.value || null })}>
+                  <option value="">Sem área</option>
+                  {(areas ?? []).map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+                </select>
+              </Field>
               <Field label="Duração"><Input value={editing.course.duration} onChange={(e) => set({ duration: e.target.value })} /></Field>
               <Field label="Modalidade"><Input value={editing.course.modality} onChange={(e) => set({ modality: e.target.value })} /></Field>
-              <Field label="Preço (Kz)"><Input type="number" min={0} value={editing.course.price} onChange={(e) => set({ price: Number(e.target.value) })} /></Field>
+              <Field label="Valor da inscrição (Kz)"><Input type="number" min={0} value={editing.course.registration_fee} onChange={(e) => set({ registration_fee: Number(e.target.value) })} /></Field>
+              <Field label="Investimento do curso (Kz)"><Input type="number" min={0} value={editing.course.price} onChange={(e) => set({ price: Number(e.target.value) })} /></Field>
               <Field label="Ordem"><Input type="number" value={editing.course.position} onChange={(e) => set({ position: Number(e.target.value) })} /></Field>
               <Field label="Descrição curta" className="sm:col-span-2"><Input value={editing.course.short_description} onChange={(e) => set({ short_description: e.target.value })} /></Field>
               <Field label="Descrição" className="sm:col-span-2"><Textarea rows={4} value={editing.course.description} onChange={(e) => set({ description: e.target.value })} /></Field>
